@@ -3,6 +3,7 @@ import onChange from 'on-change';
 export default (elements, state) => {
   const renderValidation = () => {
     const { error } = state.form;
+    console.log(error)
     const feedback = elements.feedback;
     const input = elements.input;
 
