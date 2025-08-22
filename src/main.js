@@ -1,4 +1,5 @@
 import initView from './view.js';
+import axios from 'axios'
 import createSchema from './schema.js';
 import i18next from 'i18next';
 import ru from './ru.js';
