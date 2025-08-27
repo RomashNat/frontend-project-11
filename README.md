@@ -1,6 +1,8 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/RomashNat/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/RomashNat/frontend-project-11/actions)
 
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=RomashNat_frontend-project-11)
+
 ### Project description:
 RSS, which stands for Really Simple Syndication, is a web feed standard that allows users to access updates to online content in a standardized, computer-readable format. These feeds can include blog entries, news headlines, audio, and video.
 
