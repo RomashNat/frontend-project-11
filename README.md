@@ -17,4 +17,7 @@ $ npm init @hexlet/code
 ```
 
 ### Vercel-app:
-[[https://your-vercel-app.vercel.app]](https://frontend-project-11-nine-mu.vercel.app/)
+
+```sh
+Link to check: [[https://your-vercel-app.vercel.app]](https://frontend-project-11-nine-mu.vercel.app/)
+```
