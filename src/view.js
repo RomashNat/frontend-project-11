@@ -54,9 +54,12 @@ export default (elements, state) => {
 
     const card = document.createElement('div');
     card.className = 'card border-0';
+    feedsContainer.appendChild(card);
+
     
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
+    card.appendChild(cardBody);
     
     const title = document.createElement('h2');
     title.className = 'card-title h4';
@@ -97,9 +100,11 @@ export default (elements, state) => {
 
     const card = document.createElement('div');
     card.className = 'card border-0';
+    postsContainer.appendChild(card);
     
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
+    card.appendChild(cardBody);
     
     const title = document.createElement('h2');
     title.className = 'card-title h4';

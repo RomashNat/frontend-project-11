@@ -19,6 +19,7 @@
     "axios": "^1.11.0",
     "bootstrap": "^5.3.7",
     "i18next": "^25.4.0",
+    "lodash.uniqueid": "^4.0.1",
     "on-change": "^5.0.1",
     "yup": "^1.7.0"
   }
