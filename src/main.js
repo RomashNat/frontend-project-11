@@ -9,15 +9,18 @@ import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
-
 const fetchRSS = async (url) => {
- try {
+  try {
     const proxyUrl = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
     const response = await axios.get(proxyUrl);
     return response.data.contents;
   } catch (error) {
     throw new Error('Network error');
   }
+};
+
+const createProxyUrl = (url) => {
+  return `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
 };
 
 export default () => {
@@ -30,7 +33,6 @@ export default () => {
     feedsContainer: document.querySelector('.feeds'),
     postsContainer: document.querySelector('.posts'),
   };
-
 
   const state = {
     form: {
@@ -50,12 +52,80 @@ export default () => {
     resources: { ru }
   })
 
+   // Переменная для хранения ID интервала
+  let intervalId = null;
+
+  
+    // Функция для запуска/перезапуска интервала обновления
+  const startUpdateInterval = () => {
+    // Очищаем предыдущий интервал
+    if (intervalId) {
+      clearTimeout(intervalId);
+    }
+
+    const updateFeeds = () => {
+      const addedUrls = state.feeds.map((feed) => feed.url); // Исправлено: feed.url вместо feed.resource
+      
+      if (addedUrls.length === 0) {
+        intervalId = setTimeout(updateFeeds, 5000);
+        return;
+      }
+
+      const axiosRequests = addedUrls.map((url) => {
+        const proxyUrl = createProxyUrl(url); // Исправлено: используем createProxyUrl
+        return axios.get(proxyUrl)
+          .catch(error => {
+            console.error('Error updating feed:', error);
+            return null;
+          });
+      });
+
+      Promise.all(axiosRequests)
+        .then((responses) => {
+          const validResponses = responses.filter(response => response !== null);
+          const results = validResponses.map((response) => 
+            parseRSS(response.data.contents) // Исправлено: parseRSS вместо domParser
+          );
+          
+          const allPosts = results.flatMap((result) => result.posts || []);
+          const newPosts = allPosts.filter((post) => 
+            !state.posts.some((addedPost) => addedPost.link === post.link) // Исправлено: some вместо find
+          );
+          
+          if (newPosts.length > 0) {
+            const newPostsWithId = newPosts.map((post) => ({ 
+              ...post, 
+              id: uniqueId(),
+              feedId: state.feeds.find(feed => feed.url === addedUrls[0])?.id 
+            }));
+            
+            // Обновляем состояние
+            state.posts = [...newPostsWithId, ...state.posts];
+            
+            // Если watchState реактивный, обновляем его тоже
+            if (watchState && typeof watchState.posts === 'object') {
+              watchState.posts = [...newPostsWithId, ...watchState.posts];
+            }
+          }
+        })
+        .catch((error) => {
+          console.error('Error in update interval:', error);
+        })
+        .finally(() => {
+          intervalId = setTimeout(updateFeeds, 5000);
+        });
+    };
+
+    // Запускаем обновление
+    intervalId = setTimeout(updateFeeds, 5000);
+  };
+
   const watchState = initView(elements, state);
 
   elements.form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const url = elements.input.value.trim();
-    const feedsList = watchState.feeds.map(feed => feed.url)
+    const feedsList = state.feeds.map(feed => feed.url)
     try {
       await createSchema(url, feedsList, i18n);
       watchState.form.error = null
@@ -83,6 +153,8 @@ export default () => {
 
       elements.input.value = '';
 
+      startUpdateInterval();
+
     } catch (error) {
       watchState.form.processState = 'failed'
       watchState.form.error = error.message;
@@ -109,6 +181,4 @@ export default () => {
     watchState.modalPostId = postId;
   });
 };
-
-
 
