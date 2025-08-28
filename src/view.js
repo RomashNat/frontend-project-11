@@ -22,6 +22,7 @@ export default (elements, state) => {
     const { processState } = state.form;
     const input = elements.input;
     const button = elements.button;
+    const feedback = elements.feedback;
 
     switch (processState) {
       case 'processing':
@@ -54,7 +55,7 @@ export default (elements, state) => {
 
     const card = document.createElement('div');
     card.className = 'card border-0';
-    feedsContainer.appendChild(card);
+    container.appendChild(card);
 
     
     const cardBody = document.createElement('div');
@@ -100,7 +101,7 @@ export default (elements, state) => {
 
     const card = document.createElement('div');
     card.className = 'card border-0';
-    postsContainer.appendChild(card);
+    container.appendChild(card);
     
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';

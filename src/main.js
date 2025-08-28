@@ -12,14 +12,14 @@ import 'bootstrap';
 const fetchRSS = async (url) => {
   try {
     const proxyUrl = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
-    const response = await axios.get(proxyUrl);
+    const response = await axios.get(proxyUrl); // делаем запрос не напрямую к RSS, а к своему прокси-серверу
     return response.data.contents;
   } catch (error) {
     throw new Error('Network error');
   }
 };
 
-const createProxyUrl = (url) => {
+const createProxyUrl = (url) => { // создание URL, а не выполнение запроса
   return `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
 };
 
@@ -46,7 +46,7 @@ export default () => {
     modalPostId: null,
   };
 
-  const i18n = i18next.createInstance()
+  const i18n = i18next.createInstance() // стартовая точка для системы интернационализации
   i18n.init({
     lng: 'ru',
     resources: { ru }
@@ -59,19 +59,19 @@ export default () => {
     // Функция для запуска/перезапуска интервала обновления
   const startUpdateInterval = () => {
     // Очищаем предыдущий интервал
+    // Механизм автоматического периодического обновления RSS-лент
     if (intervalId) {
-      clearTimeout(intervalId);
+      clearTimeout(intervalId); // старый таймер должен быть очищен
     }
 
-    const updateFeeds = () => {
-      const addedUrls = state.feeds.map((feed) => feed.url);
-      
+    const updateFeeds = () => { // Запросы ко всем RSS-фидам, парсинг ответов, поиск новых постов, обновление состояния приложения
+      const addedUrls = state.feeds.map((feed) => feed.url); // проверка на наличие добавленных фидов 
       if (addedUrls.length === 0) {
         intervalId = setTimeout(updateFeeds, 5000);
         return;
       }
 
-      const axiosRequests = addedUrls.map((url) => {
+      const axiosRequests = addedUrls.map((url) => { // создание массива запросов
         const proxyUrl = createProxyUrl(url);
         return axios.get(proxyUrl)
           .catch(error => {
@@ -80,18 +80,18 @@ export default () => {
           });
       });
 
-      Promise.all(axiosRequests)
-        .then((responses) => {
+      Promise.all(axiosRequests) // обработка всех запросов
+        .then((responses) => { // фильтрация и парсинг ответов
           const validResponses = responses.filter(response => response !== null);
           const results = validResponses.map((response) => 
             parseRSS(response.data.contents)
           );
-          
+          // поиск именно новых постов
           const allPosts = results.flatMap((result) => result.posts || []);
           const newPosts = allPosts.filter((post) => 
             !state.posts.some((addedPost) => addedPost.link === post.link)
           );
-          
+          // добавление новых постов в состояние
           if (newPosts.length > 0) {
             const newPostsWithId = newPosts.map((post) => ({ 
               ...post, 
@@ -120,22 +120,22 @@ export default () => {
     intervalId = setTimeout(updateFeeds, 5000);
   };
 
-  const watchState = initView(elements, state);
+  const watchState = initView(elements, state); // реактивное представление, автоматически вызывают обновление пользовательского интерфейса.
 
   elements.form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const url = elements.input.value.trim();
-    const feedsList = state.feeds.map(feed => feed.url)
-    try {
+    const feedsList = state.feeds.map(feed => feed.url) // URL всех уже добавленных фидов
+    try { // валидация по схеме
       await createSchema(url, feedsList, i18n);
       watchState.form.error = null
       watchState.form.processState = 'sending'
 
-      const xmlString = await fetchRSS(url);
+      const xmlString = await fetchRSS(url); //  Запрос к RSS-фиду через прокси
+      watchState.form.processState = 'success'
+      const { feed, posts } = parseRSS(xmlString); // Парсинг XML-данных
 
-      const { feed, posts } = parseRSS(xmlString);
-
-      const feedWithId = {
+      const feedWithId = { //  Подготовка данных и добавление ID
         ...feed,
         url,
         id: uniqueId('feed_'),
@@ -146,16 +146,17 @@ export default () => {
         id: uniqueId('post_'),
         feedId: feedWithId.id,
       }));
-
+// Обновление состояния приложения
       watchState.feeds = [...watchState.feeds, feedWithId];
       watchState.posts = [...watchState.posts, ...postsWithFeedId];
       watchState.form.processState = 'finished';
 
-      elements.input.value = '';
+      elements.input.value = ''; // очистка поля
 
-      startUpdateInterval();
+      startUpdateInterval(); // запуск механизма автообновления
 
-    } catch (error) {
+    } catch (error) { // обработка неудачного сценария
+      console.log(error)
       watchState.form.processState = 'failed'
       watchState.form.error = error.message;
       switch (error.name) {
