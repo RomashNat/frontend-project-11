@@ -64,7 +64,7 @@ export default () => {
     }
 
     const updateFeeds = () => {
-      const addedUrls = state.feeds.map((feed) => feed.url); // Исправлено: feed.url вместо feed.resource
+      const addedUrls = state.feeds.map((feed) => feed.url);
       
       if (addedUrls.length === 0) {
         intervalId = setTimeout(updateFeeds, 5000);
@@ -72,7 +72,7 @@ export default () => {
       }
 
       const axiosRequests = addedUrls.map((url) => {
-        const proxyUrl = createProxyUrl(url); // Исправлено: используем createProxyUrl
+        const proxyUrl = createProxyUrl(url);
         return axios.get(proxyUrl)
           .catch(error => {
             console.error('Error updating feed:', error);
@@ -84,12 +84,12 @@ export default () => {
         .then((responses) => {
           const validResponses = responses.filter(response => response !== null);
           const results = validResponses.map((response) => 
-            parseRSS(response.data.contents) // Исправлено: parseRSS вместо domParser
+            parseRSS(response.data.contents)
           );
           
           const allPosts = results.flatMap((result) => result.posts || []);
           const newPosts = allPosts.filter((post) => 
-            !state.posts.some((addedPost) => addedPost.link === post.link) // Исправлено: some вместо find
+            !state.posts.some((addedPost) => addedPost.link === post.link)
           );
           
           if (newPosts.length > 0) {
