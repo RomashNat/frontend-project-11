@@ -1,5 +1,5 @@
 run app:
-	npm run start
+	npm run dev
 	
 lint:
 	npx eslint .
