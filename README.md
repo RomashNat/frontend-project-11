@@ -18,5 +18,5 @@ $ npm init @hexlet/code
 
 ### Vercel-app:
 
-Link for check: [[https://your-vercel-app.vercel.app]](https://frontend-project-11-nine-mu.vercel.app/)
+Link for checking: [[https://your-vercel-app.vercel.app]](https://frontend-project-11-nine-mu.vercel.app/)
 

@@ -32,6 +32,7 @@ export default () => {
     feedback: document.querySelector('.feedback'),
     feedsContainer: document.querySelector('.feeds'),
     postsContainer: document.querySelector('.posts'),
+    modalContainer: document.querySelector('.modal-content'),
   };
 
   const state = {
