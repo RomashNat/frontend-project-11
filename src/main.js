@@ -76,7 +76,6 @@ export default () => {
         const proxyUrl = createProxyUrl(url);
         return axios.get(proxyUrl)
           .catch(error => {
-            console.error('Error updating feed:', error);
             return null;
           });
       });
@@ -110,7 +109,6 @@ export default () => {
           }
         })
         .catch((error) => {
-          console.error('Error in update interval:', error);
         })
         .finally(() => {
           intervalId = setTimeout(updateFeeds, 5000);
@@ -157,7 +155,6 @@ export default () => {
       startUpdateInterval(); // запуск механизма автообновления
 
     } catch (error) { // обработка неудачного сценария
-      console.log(error)
       watchState.form.processState = 'failed'
       watchState.form.error = error.message;
       switch (error.name) {

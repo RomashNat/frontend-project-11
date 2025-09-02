@@ -1,7 +1,11 @@
 /node_modules/
+/dist/
 
 # Playwright
+
 node_modules/
+/tests/
+/test-examples/
 /test-results/
 /playwright-report/
 /blob-report/
