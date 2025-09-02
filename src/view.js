@@ -57,15 +57,15 @@ export default (elements, state) => {
     card.className = 'card border-0';
     container.appendChild(card);
 
-    
+
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
     card.appendChild(cardBody);
-    
+
     const title = document.createElement('h2');
     title.className = 'card-title h4';
     title.textContent = 'Фиды';
-    
+
     cardBody.appendChild(title);
     card.appendChild(cardBody);
 
@@ -75,15 +75,15 @@ export default (elements, state) => {
     state.feeds.forEach(feed => {
       const item = document.createElement('li');
       item.className = 'list-group-item border-0 border-end-0';
-      
+
       const itemTitle = document.createElement('h3');
       itemTitle.className = 'h6 m-0';
       itemTitle.textContent = feed.title;
-      
+
       const itemDescription = document.createElement('p');
       itemDescription.className = 'm-0 small text-muted';
       itemDescription.textContent = feed.description;
-      
+
       item.appendChild(itemTitle);
       item.appendChild(itemDescription);
       list.appendChild(item);
@@ -102,15 +102,15 @@ export default (elements, state) => {
     const card = document.createElement('div');
     card.className = 'card border-0';
     container.appendChild(card);
-    
+
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
     card.appendChild(cardBody);
-    
+
     const title = document.createElement('h2');
     title.className = 'card-title h4';
     title.textContent = 'Посты';
-    
+
     cardBody.appendChild(title);
     card.appendChild(cardBody);
 
@@ -120,7 +120,7 @@ export default (elements, state) => {
     state.posts.forEach(post => {
       const item = document.createElement('li');
       item.className = 'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0';
-      
+
       const link = document.createElement('a');
       link.href = post.link;
       link.className = state.viewedPosts.has(post.id) ? 'fw-normal link-secondary' : 'fw-bold';
@@ -128,7 +128,7 @@ export default (elements, state) => {
       link.setAttribute('target', '_blank');
       link.setAttribute('rel', 'noopener noreferrer');
       link.textContent = post.title;
-      
+
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'btn btn-outline-primary btn-sm';
@@ -136,7 +136,14 @@ export default (elements, state) => {
       button.setAttribute('data-bs-toggle', 'modal');
       button.setAttribute('data-bs-target', '#modal');
       button.textContent = 'Просмотр';
-      
+      button.setAttribute('data-title', post.title);
+      button.setAttribute('data-description', post.description);
+      const modalTitle = document.createElement('modalTitle');
+      const modalDescription = document.createElement('modalDescription');
+      modalTitle.textContent = post.title;
+      modalDescription.textContent = post.description;
+
+
       item.appendChild(link);
       item.appendChild(button);
       list.appendChild(item);
@@ -145,7 +152,7 @@ export default (elements, state) => {
     card.appendChild(list);
     container.appendChild(card);
   };
-
+  
   return onChange(state, (path) => {
     switch (path) {
       case 'form.error':

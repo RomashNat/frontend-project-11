@@ -53,11 +53,11 @@ export default () => {
     resources: { ru }
   })
 
-   // Переменная для хранения ID интервала
+  // Переменная для хранения ID интервала
   let intervalId = null;
 
-  
-    // Функция для запуска/перезапуска интервала обновления
+
+  // Функция для запуска/перезапуска интервала обновления
   const startUpdateInterval = () => {
     // Очищаем предыдущий интервал
     // Механизм автоматического периодического обновления RSS-лент
@@ -84,25 +84,25 @@ export default () => {
       Promise.all(axiosRequests) // обработка всех запросов
         .then((responses) => { // фильтрация и парсинг ответов
           const validResponses = responses.filter(response => response !== null);
-          const results = validResponses.map((response) => 
+          const results = validResponses.map((response) =>
             parseRSS(response.data.contents)
           );
           // поиск именно новых постов
           const allPosts = results.flatMap((result) => result.posts || []);
-          const newPosts = allPosts.filter((post) => 
+          const newPosts = allPosts.filter((post) =>
             !state.posts.some((addedPost) => addedPost.link === post.link)
           );
           // добавление новых постов в состояние
           if (newPosts.length > 0) {
-            const newPostsWithId = newPosts.map((post) => ({ 
-              ...post, 
+            const newPostsWithId = newPosts.map((post) => ({
+              ...post,
               id: uniqueId(),
-              feedId: state.feeds.find(feed => feed.url === addedUrls[0])?.id 
+              feedId: state.feeds.find(feed => feed.url === addedUrls[0])?.id
             }));
-            
+
             // Обновляем состояние
             state.posts = [...newPostsWithId, ...state.posts];
-            
+
             // Если watchState реактивный, обновляем его тоже
             if (watchState && typeof watchState.posts === 'object') {
               watchState.posts = [...newPostsWithId, ...watchState.posts];
@@ -147,7 +147,7 @@ export default () => {
         id: uniqueId('post_'),
         feedId: feedWithId.id,
       }));
-// Обновление состояния приложения
+      // Обновление состояния приложения
       watchState.feeds = [...watchState.feeds, feedWithId];
       watchState.posts = [...watchState.posts, ...postsWithFeedId];
       watchState.form.processState = 'finished';
@@ -181,6 +181,32 @@ export default () => {
     const postId = postElement.dataset.id;
     watchState.viewedPosts.add(postId);
     watchState.modalPostId = postId;
+
+  });
+  // Добавляем обработчик для модального окна
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modal');
+    if (modal) {
+      modal.addEventListener('show.bs.modal', (event) => {
+        const button = event.relatedTarget; // Кнопка, которая вызвала модальное окно
+        const postId = button.getAttribute('data-id');
+
+        // Находим пост по ID
+        const post = state.posts.find(p => p.id === postId);
+
+        if (post) {
+          // Находим элементы модального окна
+          const modalTitle = modal.querySelector('.modal-title');
+          const modalBody = modal.querySelector('.modal-body');
+          const fullArticleLink = modal.querySelector('.full-article');
+
+          // Устанавливаем содержимое
+          if (modalTitle) modalTitle.textContent = post.title;
+          if (modalBody) modalBody.textContent = post.description;
+          if (fullArticleLink) fullArticleLink.href = post.link;
+        }
+      });
+    }
   });
 };
 
