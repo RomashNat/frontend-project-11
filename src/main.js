@@ -92,10 +92,10 @@ export default () => {
           )
           // добавление новых постов в состояние
           if (newPosts.length > 0) {
-            const newPostsWithId = newPosts.map((post) => ({
+            const newPostsWithId = newPosts.map(post => ({
               ...post,
               id: uniqueId(),
-              feedId: state.feeds.find((feed) => feed.url === addedUrls[0])?.id
+              feedId: state.feeds.find(feed => feed.url === addedUrls[0])?.id,
             }))
 
             // Обновляем состояние
@@ -149,7 +149,8 @@ export default () => {
       watchState.form.processState = 'finished'
       elements.input.value = '' // очистка поля
       startUpdateInterval() // запуск механизма автообновления
-      } catch (error) { // обработка неудачного сценария
+      } 
+      catch (error) { // обработка неудачного сценария
       watchState.form.processState = 'failed'
       watchState.form.error = error.message
       switch (error.name) {
