@@ -16,4 +16,15 @@ export default defineConfig([
       'build/**', // игнорируем билды
     ],
   },
+   {
+    files: ['playwright.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      }
+    },
+    rules: {
+      'no-redeclare': 'off'
+    }
+  }
 ])
