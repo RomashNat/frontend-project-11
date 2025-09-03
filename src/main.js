@@ -149,8 +149,8 @@ export default () => {
       watchState.form.processState = 'finished'
       elements.input.value = '' // очистка поля
       startUpdateInterval() // запуск механизма автообновления
-      } 
-      catch (error) { // обработка неудачного сценария
+    }
+    catch (error) { // обработка неудачного сценария
       watchState.form.processState = 'failed'
       watchState.form.error = error.message
       switch (error.name) {
