@@ -119,7 +119,7 @@ export default () => {
     intervalId = setTimeout(updateFeeds, 5000);
   };
 
-  const watchState = initView(elements, state); // реактивное представление, автоматически вызывают обновление пользовательского интерфейса.
+  const watchState = initView(elements, state, i18n); // реактивное представление, автоматически вызывают обновление пользовательского интерфейса.
 
   elements.form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -162,10 +162,10 @@ export default () => {
           watchState.form.error = error.message;
           break;
         case 'ParseError':
-          watchState.form.error = 'form.errors.notValidRss';
+          watchState.form.error = 'Ресурс не содержит валидный RSS';
           break;
         default:
-          watchState.form.error = 'form.errors.networkError';
+          watchState.form.error = 'Ошибка сети';
           break;
       }
     }
