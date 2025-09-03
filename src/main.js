@@ -14,7 +14,7 @@ const fetchRSS = async (url) => {
     const proxyUrl = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
     const response = await axios.get(proxyUrl); // делаем запрос не напрямую к RSS, а к своему прокси-серверу
     return response.data.contents;
-  } catch (error) {
+  } catch {
     throw new Error('Network error');
   }
 };
@@ -75,7 +75,7 @@ export default () => {
       const axiosRequests = addedUrls.map((url) => { // создание массива запросов
         const proxyUrl = createProxyUrl(url);
         return axios.get(proxyUrl)
-          .catch(error => {
+          .catch(() => {
             return null;
           });
       });
@@ -108,7 +108,7 @@ export default () => {
             }
           }
         })
-        .catch((error) => {
+        .catch(() => {
         })
         .finally(() => {
           intervalId = setTimeout(updateFeeds, 5000);

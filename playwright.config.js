@@ -1,5 +1,6 @@
 // @ts-check
 /* eslint-env node */
+/* eslint-disable no-undef */
 import { defineConfig, devices } from '@playwright/test';
 
 /**
