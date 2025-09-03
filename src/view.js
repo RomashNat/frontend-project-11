@@ -16,7 +16,7 @@ export default (elements, state) => {
       input.classList.remove('is-invalid')
       feedback.textContent = ''
     }
-  };
+  }
 
   const renderFormState = () => {
     const { processState } = state.form
@@ -45,7 +45,7 @@ export default (elements, state) => {
       default:
         break
     }
-  };
+  }
 
   const renderFeeds = () => {
     const container = elements.feedsContainer
@@ -56,7 +56,6 @@ export default (elements, state) => {
     const card = document.createElement('div')
     card.className = 'card border-0'
     container.appendChild(card)
-
 
     const cardBody = document.createElement('div')
     cardBody.className = 'card-body'
@@ -72,7 +71,7 @@ export default (elements, state) => {
     const list = document.createElement('ul')
     list.className = 'list-group border-0 rounded-0'
 
-    state.feeds.forEach(feed => {
+    state.feeds.forEach((feed) => {
       const item = document.createElement('li')
       item.className = 'list-group-item border-0 border-end-0'
 
@@ -91,7 +90,7 @@ export default (elements, state) => {
 
     card.appendChild(list)
     container.appendChild(card)
-  };
+  }
 
   const renderPosts = () => {
     const container = elements.postsContainer
@@ -117,7 +116,7 @@ export default (elements, state) => {
     const list = document.createElement('ul')
     list.className = 'list-group border-0 rounded-0'
 
-    state.posts.forEach(post => {
+    state.posts.forEach((post) => {
       const item = document.createElement('li')
       item.className = 'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0'
 
@@ -143,7 +142,6 @@ export default (elements, state) => {
       modalTitle.textContent = post.title
       modalDescription.textContent = post.description
 
-
       item.appendChild(link)
       item.appendChild(button)
       list.appendChild(item)
@@ -157,16 +155,16 @@ export default (elements, state) => {
     switch (path) {
       case 'form.error':
         renderValidation()
-        break;
+        break
       case 'form.processState':
         renderFormState()
-        break;
+        break
       case 'feeds':
         renderFeeds()
-        break;
+        break
       case 'posts':
         renderPosts()
-        break;
+        break
       case 'viewedPosts':
         renderPosts()
         break
