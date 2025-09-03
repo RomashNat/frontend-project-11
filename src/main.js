@@ -162,10 +162,10 @@ export default () => {
           watchState.form.error = error.message;
           break;
         case 'ParseError':
-          watchState.form.error = 'notRss';
+          watchState.form.error = 'form.errors.notValidRss';
           break;
         default:
-          watchState.form.error = error.message.includes('network') ? 'network' : 'unknown';
+          watchState.form.error = 'form.errors.networkError';
           break;
       }
     }
