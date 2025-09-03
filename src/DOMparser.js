@@ -20,7 +20,7 @@ export default (xmlString) => {
   const feed = { // Создает объект с информацией о RSS-ленте
     title: titleElement ? titleElement.textContent : '',
     description: descriptionElement ? descriptionElement.textContent : '',
-  };
+  }
 
   const items = xmlDoc.querySelectorAll('item') // находит все элементы <item> (посты в RSS)
   const posts = Array.from(items).map((item) => { // Преобразование элементов в посты
@@ -30,11 +30,11 @@ export default (xmlString) => {
     const itemPubDateElement = item.querySelector('pubDate')
     // Для каждого item находим элементы один раз и сохраняем в переменные
     return {
-        title: itemTitleElement ? itemTitleElement.textContent : '',
-        description: itemDescriptionElement ? itemDescriptionElement.textContent : '',
-        link: itemLinkElement ? itemLinkElement.textContent : '',
-        pubDate: itemPubDateElement ? itemPubDateElement.textContent : '',
-        // Создаем объект поста с безопасными проверками на существование элементов
+      title: itemTitleElement ? itemTitleElement.textContent : '',
+      description: itemDescriptionElement ? itemDescriptionElement.textContent : '',
+      link: itemLinkElement ? itemLinkElement.textContent : '',
+      pubDate: itemPubDateElement ? itemPubDateElement.textContent : '',
+      // Создаем объект поста с безопасными проверками на существование элементов
     }
   })
 

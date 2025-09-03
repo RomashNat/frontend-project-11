@@ -11,9 +11,9 @@ export default defineConfig([
     languageOptions:
       { globals: globals.browser },
     ignores: [
-    'dist/**', // игнорируем скомпилированные файлы
-    'node_modules/**', // игнорируем зависимости
-    'build/**', // игнорируем билды
+      'dist/**', // игнорируем скомпилированные файлы
+      'node_modules/**', // игнорируем зависимости
+      'build/**', // игнорируем билды
     ],
   },
 ])

@@ -145,7 +145,7 @@ export default (elements, state) => {
       item.appendChild(link)
       item.appendChild(button)
       list.appendChild(item)
-    });
+    })
 
     card.appendChild(list)
     container.appendChild(card)

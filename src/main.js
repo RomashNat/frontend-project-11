@@ -12,8 +12,8 @@ import 'bootstrap'
 const fetchRSS = async (url) => {
   try {
     const proxyUrl = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`
-    const response = await axios.get(proxyUrl); // делаем запрос не напрямую к RSS, а к своему прокси-серверу
-    return response.data.contents;
+    const response = await axios.get(proxyUrl) // делаем запрос не напрямую к RSS, а к своему прокси-серверу
+    return response.data.contents
   }
   catch {
     throw new Error('Network error')
@@ -22,10 +22,9 @@ const fetchRSS = async (url) => {
 
 const createProxyUrl = (url) => { // создание URL, а не выполнение запроса
   return `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`
-};
+}
 
 export default () => {
-
   const elements = {
     form: document.querySelector('[aria-label="form"]'),
     input: document.getElementById('url-input'),
@@ -51,7 +50,7 @@ export default () => {
   const i18n = i18next.createInstance() // стартовая точка для системы интернационализации
   i18n.init({
     lng: 'ru',
-    resources: { ru }
+    resources: { ru },
   })
 
   // Переменная для хранения ID интервала
@@ -66,7 +65,7 @@ export default () => {
     }
 
     const updateFeeds = () => { // Запросы ко всем RSS-фидам, парсинг ответов, поиск новых постов, обновление состояния приложения
-      const addedUrls = state.feeds.map((feed) => feed.url) // проверка на наличие добавленных фидов 
+      const addedUrls = state.feeds.map(feed => feed.url) // проверка на наличие добавленных фидов
       if (addedUrls.length === 0) {
         intervalId = setTimeout(updateFeeds, 5000)
         return
@@ -77,27 +76,27 @@ export default () => {
         return axios.get(proxyUrl)
           .catch(() => {
             return null
-          });
-      });
+          })
+      })
 
       Promise.all(axiosRequests) // обработка всех запросов
         .then((responses) => { // фильтрация и парсинг ответов
           const validResponses = responses.filter(response => response !== null)
-          const results = validResponses.map((response) =>
-            parseRSS(response.data.contents)
-          );
+          const results = validResponses.map(response =>
+            parseRSS(response.data.contents),
+          )
           // поиск именно новых постов
-          const allPosts = results.flatMap((result) => result.posts || [])
-          const newPosts = allPosts.filter((post) =>
-            !state.posts.some((addedPost) => addedPost.link === post.link)
-          );
+          const allPosts = results.flatMap(result => result.posts || [])
+          const newPosts = allPosts.filter(post =>
+            !state.posts.some(addedPost => addedPost.link === post.link),
+          )
           // добавление новых постов в состояние
           if (newPosts.length > 0) {
             const newPostsWithId = newPosts.map((post) => ({
               ...post,
               id: uniqueId(),
-              feedId: state.feeds.find(feed => feed.url === addedUrls[0])?.id
-            }));
+              feedId: state.feeds.find((feed) => feed.url === addedUrls[0])?.id
+            }))
 
             // Обновляем состояние
             state.posts = [...newPostsWithId, ...state.posts]
@@ -113,7 +112,7 @@ export default () => {
         .finally(() => {
           intervalId = setTimeout(updateFeeds, 5000)
         })
-    };
+    }
 
     // Запускаем обновление
     intervalId = setTimeout(updateFeeds, 5000)
@@ -126,7 +125,7 @@ export default () => {
     const url = elements.input.value.trim()
     const feedsList = state.feeds.map(feed => feed.url) // URL всех уже добавленных фидов
     try { // валидация по схеме
-      await createSchema(url, feedsList, i18n);
+      await createSchema(url, feedsList, i18n)
       watchState.form.error = null
       watchState.form.processState = 'sending'
       const xmlString = await fetchRSS(url) //  Запрос к RSS-фиду через прокси
@@ -137,7 +136,7 @@ export default () => {
         ...feed,
         url,
         id: uniqueId('feed_'),
-      };
+      }
 
       const postsWithFeedId = posts.map(post => ({
         ...post,
@@ -150,8 +149,7 @@ export default () => {
       watchState.form.processState = 'finished'
       elements.input.value = '' // очистка поля
       startUpdateInterval() // запуск механизма автообновления
-
-    } catch (error) { // обработка неудачного сценария
+      } catch (error) { // обработка неудачного сценария
       watchState.form.processState = 'failed'
       watchState.form.error = error.message
       switch (error.name) {
