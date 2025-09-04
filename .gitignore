@@ -1,14 +1,4 @@
 /node_modules/
 /dist/
-
-# Playwright
-
 node_modules/
-#__tests__/
-/test-examples/
-/test-results/
-/playwright-report/
 /blob-report/
-/playwright/.cache/
-/tests/
-/tests-examples/
