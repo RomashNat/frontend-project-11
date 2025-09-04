@@ -4,7 +4,7 @@
 # Playwright
 
 node_modules/
-__tests__/
+#__tests__/
 /test-examples/
 /test-results/
 /playwright-report/
